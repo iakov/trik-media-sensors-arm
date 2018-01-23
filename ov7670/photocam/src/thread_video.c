@@ -14,14 +14,14 @@
 #include "internal/module_v4l2.h"
 
 
-/*static int threadVideoSelectLoop(Runtime* _runtime, CodecEngine* _ce, V4L2Input* _v4l2, FBOutput* _fb)
+static int threadVideoSelectLoop(Runtime* _runtime, V4L2Input* _v4l2, FBOutput* _fb)
 {
   int res;
   int maxFd = 0;
   fd_set fdsIn;
   static const struct timespec s_selectTimeout = { .tv_sec=1, .tv_nsec=0 };
 
-  if (_runtime == NULL || _ce == NULL || _v4l2 == NULL || _fb == NULL)
+  if (_runtime == NULL || _v4l2 == NULL || _fb == NULL)
     return EINVAL;
 
   FD_ZERO(&fdsIn);
@@ -77,7 +77,7 @@
     fprintf(stderr, "runtimeFetchTargetDetectCommand() failed: %d\n", res);
     return res;
   }
-
+/*
   if ((res = runtimeGetVideoOutParams(_runtime, &(_ce->m_videoOutEnable))) != 0)
   {
     fprintf(stderr, "runtimeGetVideoOutParams() failed: %d\n", res);
@@ -105,6 +105,8 @@
     return res;
   }
 
+
+*/
 
   if ((res = fbOutputPutFrame(_fb)) != 0)
   {
@@ -140,10 +142,7 @@
   }
 
   return 0;
-} */
-
-
-
+}
 
 void* threadVideo(void* _arg)
 {
@@ -243,6 +242,14 @@ void* threadVideo(void* _arg)
       if ((res = v4l2InputReportFPS(v4l2, last_fps_report_elapsed_ms)) != 0)
         fprintf(stderr, "v4l2InputReportFPS() failed: %d\n", res);
     }
+
+    if ((res = threadVideoSelectLoop(runtime, v4l2, fb)) != 0)
+    {
+      fprintf(stderr, "threadVideoSelectLoop() failed: %d\n", res);
+      exit_code = res;
+      goto exit_fb_stop;
+    }
+
   }
   printf("Left video thread loop\n");
 
