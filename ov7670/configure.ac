@@ -40,7 +40,7 @@ AC_TYPE_SSIZE_T
 
 # Checks for library functions.
 AC_CHECK_LIB([pthread], [pthread_create],,[AC_MSG_ERROR([libpthread is mandatory])])
-AC_CHECK_LIB([v4l2], [v4l2_open],,[AC_MSG_ERROR([libv4l2 is mandatory])])
+#AC_CHECK_LIB([v4l2], [v4l2_open],,[AC_MSG_ERROR([libv4l2 is mandatory])])
 
 # Check for C++0x support features
 AC_LANG(C++)

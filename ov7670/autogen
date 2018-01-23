@@ -1,4 +1,4 @@
-aclocal
-automake -ac
-autoconf
+aclocal --install -I m4
+automake -afc
+autoconf -B m4 -f
 ./configure $*

@@ -105,10 +105,9 @@ CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = mxn_sensor_arm$(EXEEXT)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_mxn_sensor_arm_OBJECTS = main.$(OBJEXT) module_ce.$(OBJEXT) \
-	module_fb.$(OBJEXT) module_rc.$(OBJEXT) module_v4l2.$(OBJEXT) \
-	runtime.$(OBJEXT) thread_input.$(OBJEXT) \
-	thread_video.$(OBJEXT)
+am_mxn_sensor_arm_OBJECTS = main.$(OBJEXT) module_fb.$(OBJEXT) \
+	module_rc.$(OBJEXT) module_v4l2.$(OBJEXT) runtime.$(OBJEXT) \
+	thread_input.$(OBJEXT) thread_video.$(OBJEXT)
 mxn_sensor_arm_OBJECTS = $(am_mxn_sensor_arm_OBJECTS)
 mxn_sensor_arm_LDADD = $(LDADD)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -305,7 +304,6 @@ DSP_HEADERS_DIR = $(srcdir)/../../../../trik-media-sensors-dsp/trik/ov7670/mxn_s
 AM_CPPFLAGS = -I$(DSP_HEADERS_DIR) -I../include -Wall -Wextra
 AM_CXXFLAGS = -Weffc++
 mxn_sensor_arm_SOURCES = main.c \
-                         module_ce.c \
                          module_fb.c \
                          module_rc.c \
                          module_v4l2.c \
@@ -407,7 +405,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module_ce.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module_fb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module_rc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module_v4l2.Po@am__quote@

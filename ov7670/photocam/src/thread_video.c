@@ -10,12 +10,11 @@
 
 #include "internal/thread_video.h"
 #include "internal/runtime.h"
-#include "internal/module_ce.h"
 #include "internal/module_fb.h"
 #include "internal/module_v4l2.h"
 
 
-static int threadVideoSelectLoop(Runtime* _runtime, CodecEngine* _ce, V4L2Input* _v4l2, FBOutput* _fb)
+/*static int threadVideoSelectLoop(Runtime* _runtime, CodecEngine* _ce, V4L2Input* _v4l2, FBOutput* _fb)
 {
   int res;
   int maxFd = 0;
@@ -141,7 +140,7 @@ static int threadVideoSelectLoop(Runtime* _runtime, CodecEngine* _ce, V4L2Input*
   }
 
   return 0;
-}
+} */
 
 
 
@@ -151,7 +150,6 @@ void* threadVideo(void* _arg)
   int res = 0;
   intptr_t exit_code = 0;
   Runtime* runtime = (Runtime*)_arg;
-  CodecEngine* ce;
   V4L2Input* v4l2;
   FBOutput* fb;
   struct timespec last_fps_report_time;
@@ -162,19 +160,10 @@ void* threadVideo(void* _arg)
     goto exit;
   }
 
-  if (   (ce   = runtimeModCodecEngine(runtime)) == NULL
-      || (v4l2 = runtimeModV4L2Input(runtime))   == NULL
+  if (   (v4l2 = runtimeModV4L2Input(runtime))   == NULL
       || (fb   = runtimeModFBOutput(runtime))    == NULL)
   {
     exit_code = EINVAL;
-    goto exit;
-  }
-
-
-  if ((res = codecEngineOpen(ce, runtimeCfgCodecEngine(runtime))) != 0)
-  {
-    fprintf(stderr, "codecEngineOpen() failed: %d\n", res);
-    exit_code = res;
     goto exit;
   }
 
@@ -204,12 +193,6 @@ void* threadVideo(void* _arg)
   if ((res = fbOutputGetFormat(fb, &dstImageDesc)) != 0)
   {
     fprintf(stderr, "fbOutputGetFormat() failed: %d\n", res);
-    exit_code = res;
-    goto exit_fb_close;
-  }
-  if ((res = codecEngineStart(ce, runtimeCfgCodecEngine(runtime), &srcImageDesc, &dstImageDesc)) != 0)
-  {
-    fprintf(stderr, "codecEngineStart() failed: %d\n", res);
     exit_code = res;
     goto exit_fb_close;
   }
@@ -256,19 +239,9 @@ void* threadVideo(void* _arg)
     {
       last_fps_report_time.tv_sec += 10;
 
-      if ((res = codecEngineReportLoad(ce, last_fps_report_elapsed_ms)) != 0)
-        fprintf(stderr, "codecEngineReportLoad() failed: %d\n", res);
 
       if ((res = v4l2InputReportFPS(v4l2, last_fps_report_elapsed_ms)) != 0)
         fprintf(stderr, "v4l2InputReportFPS() failed: %d\n", res);
-    }
-
-
-    if ((res = threadVideoSelectLoop(runtime, ce, v4l2, fb)) != 0)
-    {
-      fprintf(stderr, "threadVideoSelectLoop() failed: %d\n", res);
-      exit_code = res;
-      goto exit_fb_stop;
     }
   }
   printf("Left video thread loop\n");
@@ -283,8 +256,6 @@ void* threadVideo(void* _arg)
     fprintf(stderr, "v4l2InputStop() failed: %d\n", res);
 
  exit_ce_stop:
-  if ((res = codecEngineStop(ce)) != 0)
-    fprintf(stderr, "codecEngineStop() failed: %d\n", res);
 
 
  exit_fb_close:
@@ -296,8 +267,6 @@ void* threadVideo(void* _arg)
     fprintf(stderr, "v4l2InputClose() failed: %d\n", res);
 
  exit_ce_close:
-  if ((res = codecEngineClose(ce)) != 0)
-    fprintf(stderr, "codecEngineClose() failed: %d\n", res);
 
 
  exit:

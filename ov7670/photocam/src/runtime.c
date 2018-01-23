@@ -16,7 +16,6 @@
 
 static const RuntimeConfig s_runtimeConfig = {
   .m_verbose = false,
-  .m_codecEngineConfig = { "dsp_server.xe674", "vidtranscode_cv"},
   .m_v4l2Config        = { "/dev/video0", 320, 240, V4L2_PIX_FMT_YUV422P },
   .m_fbConfig          = { "/dev/fb0" },
   .m_rcConfig          = { "/run/mxn-sensor.in.fifo", "/run/mxn-sensor.out.fifo", true, {3, 3}}
@@ -29,7 +28,6 @@ void runtimeReset(Runtime* _runtime)
 
   _runtime->m_config = s_runtimeConfig;
 
-  memset(&_runtime->m_modules.m_codecEngine,  0, sizeof(_runtime->m_modules.m_codecEngine));
   memset(&_runtime->m_modules.m_v4l2Input,    0, sizeof(_runtime->m_modules.m_v4l2Input));
   _runtime->m_modules.m_v4l2Input.m_fd = -1;
   memset(&_runtime->m_modules.m_fbOutput,     0, sizeof(_runtime->m_modules.m_fbOutput));
@@ -90,8 +88,8 @@ bool runtimeParseArgs(Runtime* _runtime, int _argc, char* const _argv[])
       case 0:
         switch (longopt)
         {
-          case 0: cfg->m_codecEngineConfig.m_serverPath = optarg;	break;
-          case 1: cfg->m_codecEngineConfig.m_codecName = optarg;	break;
+          //case 0: cfg->m_codecEngineConfig.m_serverPath = optarg;	break;
+          //case 1: cfg->m_codecEngineConfig.m_codecName = optarg;	break;
 
           case 2: cfg->m_v4l2Config.m_path = optarg;			break;
           case 3: cfg->m_v4l2Config.m_width = atoi(optarg);		break;
@@ -184,12 +182,6 @@ int runtimeInit(Runtime* _runtime)
 
   verbose = runtimeCfgVerbose(_runtime);
 
-  if ((res = codecEngineInit(verbose)) != 0)
-  {
-    fprintf(stderr, "codecEngineInit() failed: %d\n", res);
-    exit_code = res;
-  }
-
   if ((res = v4l2InputInit(verbose)) != 0)
   {
     fprintf(stderr, "v4l2InputInit() failed: %d\n", res);
@@ -229,9 +221,6 @@ int runtimeFini(Runtime* _runtime)
 
   if ((res = v4l2InputFini()) != 0)
     fprintf(stderr, "v4l2InputFini() failed: %d\n", res);
-
-  if ((res = codecEngineFini()) != 0)
-    fprintf(stderr, "codecEngineFini() failed: %d\n", res);
 
   return 0;
 }
@@ -313,14 +302,6 @@ bool runtimeCfgVerbose(const Runtime* _runtime)
   return _runtime->m_config.m_verbose;
 }
 
-const CodecEngineConfig* runtimeCfgCodecEngine(const Runtime* _runtime)
-{
-  if (_runtime == NULL)
-    return NULL;
-
-  return &_runtime->m_config.m_codecEngineConfig;
-}
-
 const V4L2Config* runtimeCfgV4L2Input(const Runtime* _runtime)
 {
   if (_runtime == NULL)
@@ -347,14 +328,6 @@ const RCConfig* runtimeCfgRCInput(const Runtime* _runtime)
 
 
 
-
-CodecEngine* runtimeModCodecEngine(Runtime* _runtime)
-{
-  if (_runtime == NULL)
-    return NULL;
-
-  return &_runtime->m_modules.m_codecEngine;
-}
 
 V4L2Input* runtimeModV4L2Input(Runtime* _runtime)
 {

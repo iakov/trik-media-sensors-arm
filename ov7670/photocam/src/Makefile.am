@@ -7,7 +7,6 @@ AM_CXXFLAGS             = -Weffc++
 bin_PROGRAMS            = $(MAIN_TARGET_NAME)
 
 mxn_sensor_arm_SOURCES = main.c \
-                         module_ce.c \
                          module_fb.c \
                          module_rc.c \
                          module_v4l2.c \

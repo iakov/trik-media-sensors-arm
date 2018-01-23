@@ -4,7 +4,6 @@
 #include <pthread.h>
 
 #include "internal/common.h"
-#include "internal/module_ce.h"
 #include "internal/module_fb.h"
 #include "internal/module_v4l2.h"
 #include "internal/module_rc.h"
@@ -19,7 +18,6 @@ typedef struct RuntimeConfig
 {
   bool               m_verbose;
 
-  CodecEngineConfig  m_codecEngineConfig;
   V4L2Config         m_v4l2Config;
   FBConfig           m_fbConfig;
   RCConfig           m_rcConfig;
@@ -27,7 +25,6 @@ typedef struct RuntimeConfig
 
 typedef struct RuntimeModules
 {
-  CodecEngine  m_codecEngine;
   V4L2Input    m_v4l2Input;
   FBOutput     m_fbOutput;
   RCInput      m_rcInput;
@@ -71,12 +68,10 @@ int runtimeStop(Runtime* _runtime);
 
 
 bool                     runtimeCfgVerbose(const Runtime* _runtime);
-const CodecEngineConfig* runtimeCfgCodecEngine(const Runtime* _runtime);
 const V4L2Config*        runtimeCfgV4L2Input(const Runtime* _runtime);
 const FBConfig*          runtimeCfgFBOutput(const Runtime* _runtime);
 const RCConfig*          runtimeCfgRCInput(const Runtime* _runtime);
 
-CodecEngine*  runtimeModCodecEngine(Runtime* _runtime);
 V4L2Input*    runtimeModV4L2Input(Runtime* _runtime);
 FBOutput*     runtimeModFBOutput(Runtime* _runtime);
 RCInput*      runtimeModRCInput(Runtime* _runtime);

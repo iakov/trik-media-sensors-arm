@@ -17239,53 +17239,7 @@ else
   as_fn_error $? "libpthread is mandatory" "$LINENO" 5
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for v4l2_open in -lv4l2" >&5
-$as_echo_n "checking for v4l2_open in -lv4l2... " >&6; }
-if ${ac_cv_lib_v4l2_v4l2_open+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lv4l2  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char v4l2_open ();
-int
-main ()
-{
-return v4l2_open ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_v4l2_v4l2_open=yes
-else
-  ac_cv_lib_v4l2_v4l2_open=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_v4l2_v4l2_open" >&5
-$as_echo "$ac_cv_lib_v4l2_v4l2_open" >&6; }
-if test "x$ac_cv_lib_v4l2_v4l2_open" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBV4L2 1
-_ACEOF
-
-  LIBS="-lv4l2 $LIBS"
-
-else
-  as_fn_error $? "libv4l2 is mandatory" "$LINENO" 5
-fi
-
+#AC_CHECK_LIB([v4l2], [v4l2_open],,[AC_MSG_ERROR([libv4l2 is mandatory])])
 
 # Check for C++0x support features
 ac_ext=cpp

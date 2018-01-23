@@ -10,9 +10,8 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <unistd.h> 
 #include <linux/videodev2.h>
-#include <libv4l2.h>
 
 #include "internal/module_v4l2.h"
 
@@ -413,8 +412,8 @@ int do_v4l2InputReportFPS(V4L2Input* _v4l2, long long _ms)
 
 int v4l2InputInit(bool _verbose)
 {
-  if (_verbose)
-    v4l2_log_file = stderr;
+  //if (_verbose)
+  //  v4l2_log_file = stderr;
   return 0;
 }
 
