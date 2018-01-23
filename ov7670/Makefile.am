@@ -5,4 +5,5 @@ SUBDIRS			= object_sensor \
 			  edge_line_sensor \
 			  mxn_sensor \
 			  motion_sensor \
-			  jpeg_encoder
+			  jpeg_encoder \
+			  photocam

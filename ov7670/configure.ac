@@ -47,10 +47,10 @@ AC_LANG(C++)
 
 
 # Check for pkgconfig dependencies and setup flags
-PKGCONFIG_REQUIRES="libcodecengine-client"
-AC_SUBST([PKGCONFIG_REQUIRES])
+#PKGCONFIG_REQUIRES="libcodecengine-client"
+#AC_SUBST([PKGCONFIG_REQUIRES])
 
-PKG_CHECK_MODULES([PKGCONFIG], [${PKGCONFIG_REQUIRES}])
+#PKG_CHECK_MODULES([PKGCONFIG], [${PKGCONFIG_REQUIRES}])
 CPPFLAGS+=" ${PKGCONFIG_CFLAGS}"
 LIBS+=" ${PKGCONFIG_LIBS}"
 
@@ -66,6 +66,8 @@ AC_CONFIG_FILES([Makefile
                  mxn_sensor/src/Makefile
                  motion_sensor/Makefile
                  motion_sensor/src/Makefile
+                 photocam/Makefile
+                 photocam/src/Makefile
 		 jpeg_encoder/Makefile
                  jpeg_encoder/src/Makefile])
 
